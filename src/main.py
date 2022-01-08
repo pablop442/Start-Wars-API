@@ -38,6 +38,14 @@ def get_users():
     all_users = list(map(lambda x: x.serialize(), users))
     return jsonify(all_users), 200
 
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_one_user(user_id):
+    user_x = User.query.get(user_id)
+    if user_x is None:
+        return 'User not found', 404
+    else:
+        return jsonify(user_x.serialize()), 200
+
 @app.route('/user', methods=['POST'])
 def create_users():
     request_body = request.get_json()
@@ -46,12 +54,15 @@ def create_users():
     db.session.commit()
     return jsonify(request_body), 201
 
-#User ID endpoint
-
-@app.route('/user/<int:user_id>', methods=['GET'])
-def get_one_user(user_id):
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
     user_x = User.query.get(user_id)
-    return jsonify(user_x), 200
+    if user_x is None:
+        return 'User not found', 404
+    else:
+        db.session.delete(user_x)
+        db.session.commit()
+        return jsonify("User deleted"), 200
 
 #People endpoints
 
@@ -61,6 +72,14 @@ def get_people():
     all_people = list(map(lambda x: x.serialize(), people))
     return jsonify(all_people), 200
 
+@app.route('/people/<int:people_id>', methods=['GET'])
+def get_one_people(people_id):
+    people_x = People.query.get(people_id)
+    if people_x is None:
+        return 'People not found', 404
+    else:
+        return jsonify(people_x.serialize()), 200
+
 @app.route('/people', methods=['POST'])
 def create_people():
     request_body = request.get_json()
@@ -68,6 +87,16 @@ def create_people():
     db.session.add(new_people)
     db.session.commit()
     return jsonify(request_body), 201
+
+@app.route('/people/<int:people_id>', methods=['DELETE'])
+def delete_people(people_id):
+    people_x = People.query.get(people_id)
+    if people_x is None:
+        return 'People not found', 404
+    else:
+        db.session.delete(people_x)
+        db.session.commit()
+        return jsonify("People deleted"), 200
 
 #Planets endpoints
 
@@ -77,6 +106,14 @@ def get_planets():
     all_planets = list(map(lambda x: x.serialize(), planets))
     return jsonify(all_planets), 200
 
+@app.route('/planets/<int:planets_id>', methods=['GET'])
+def get_one_planets(planets_id):
+    planets_x = Planets.query.get(planets_id)
+    if planets_x is None:
+        return 'Planet not found', 404
+    else:
+        return jsonify(planets_x.serialize()), 200
+
 @app.route('/planets', methods=['POST'])
 def create_planets():
     request_body = request.get_json()
@@ -84,6 +121,16 @@ def create_planets():
     db.session.add(new_planet)
     db.session.commit()
     return jsonify(request_body), 201
+
+@app.route('/planets/<int:planets_id>', methods=['DELETE'])
+def delete_planets(planets_id):
+    planets_x = Planets.query.get(planets_id)
+    if planets_x is None:
+        return 'Planet not found', 404
+    else:
+        db.session.delete(planets_x)
+        db.session.commit()
+        return jsonify("Planet deleted"), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

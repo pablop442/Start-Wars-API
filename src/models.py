@@ -23,10 +23,10 @@ class User(db.Model):
         }
 
     # #Saving user
-    # def create(self):
-    #     db.session.add(self)
-    #     db.session.commit()
-    #     return self
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
 
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
